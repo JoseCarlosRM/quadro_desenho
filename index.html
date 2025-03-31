@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadro de Desenho</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #toolbar {
+            margin-bottom: 10px;
+        }
+        canvas {
+            border: 2px solid black;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <input type="color" id="colorPicker" value="#000000">
+        <input type="range" id="sizePicker" min="1" max="10" value="5">
+        <button onclick="clearCanvas()">Limpar</button>
+    </div>
+    <canvas id="drawingCanvas" width="600" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const sizePicker = document.getElementById('sizePicker');
+        
+        let drawing = false;
+        
+        canvas.addEventListener('mousedown', () => drawing = true);
+        canvas.addEventListener('mouseup', () => drawing = false);
+        canvas.addEventListener('mousemove', draw);
+        
+        function draw(event) {
+            if (!drawing) return;
+            ctx.lineWidth = sizePicker.value;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = colorPicker.value;
+            
+            ctx.lineTo(event.offsetX, event.offsetY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(event.offsetX, event.offsetY);
+        }
+        
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+</body>
+</html>
